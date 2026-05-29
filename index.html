@@ -63,7 +63,7 @@
   /* dodging NO button + cat swarm */
   #noBtn{transition:left .18s ease, top .18s ease, opacity .4s}
   #noBtn.dodging{
-    position:fixed;z-index:30;margin:0;white-space:nowrap;
+    position:fixed;z-index:30;margin:0;white-space:nowrap;max-width:calc(100vw - 28px);
     background:var(--ink);color:#fff;border-color:transparent;font-weight:600;
     /* dark fill reads on light photos, white ring reads on dark areas */
     box-shadow:0 0 0 2px #fff, 0 10px 26px rgba(0,0,0,.45);
@@ -579,14 +579,20 @@
               'nuh-uh 😼','pretty please? 💗','too slow 😹','can\'t click me 😝',
               'almost! 👀','last one… 🐾'];
   function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
-  // always lands fully inside the viewport, measured AFTER any text change
+  // always lands fully inside the viewport, then self-corrects using the REAL rendered box
   function fleeMove(){
     noBtn.classList.add('dodging');
-    var bw=noBtn.offsetWidth||150, bh=noBtn.offsetHeight||46, m=14;
-    var maxX=Math.max(m, window.innerWidth  - bw - m);
-    var maxY=Math.max(m, window.innerHeight - bh - m);
+    var m=14, vw=document.documentElement.clientWidth, vh=document.documentElement.clientHeight;
+    var bw=noBtn.offsetWidth||150, bh=noBtn.offsetHeight||46;
+    var maxX=Math.max(m, vw - bw - m), maxY=Math.max(m, vh - bh - m);
     noBtn.style.left = clamp(m + Math.random()*(maxX-m), m, maxX) + 'px';
     noBtn.style.top  = clamp(m + Math.random()*(maxY-m), m, maxY) + 'px';
+    // safety net: read the actual painted rect and pull it back if anything overflows
+    var r=noBtn.getBoundingClientRect();
+    if(r.right  > vw-m) noBtn.style.left = Math.max(m, vw - m - r.width)  + 'px';
+    if(r.bottom > vh-m) noBtn.style.top  = Math.max(m, vh - m - r.height) + 'px';
+    if(r.left   < m)    noBtn.style.left = m + 'px';
+    if(r.top    < m)    noBtn.style.top  = m + 'px';
   }
   // hovering only makes it flee — it does NOT count, so idle mouse movement never "uses it up"
   function onHover(){
