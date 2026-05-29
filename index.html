@@ -63,7 +63,7 @@
   /* dodging NO button + cat swarm */
   #noBtn{transition:left .18s ease, top .18s ease, opacity .4s}
   #noBtn.dodging{
-    position:fixed;z-index:30;margin:0;
+    position:fixed;z-index:30;margin:0;white-space:nowrap;
     background:var(--ink);color:#fff;border-color:transparent;font-weight:600;
     /* dark fill reads on light photos, white ring reads on dark areas */
     box-shadow:0 0 0 2px #fff, 0 10px 26px rgba(0,0,0,.45);
@@ -574,33 +574,46 @@
 
   /* ----- the playful (not pushy) dodging "No" button ----- */
   var noBtn=document.getElementById('noBtn');
-  var noTries=0, lastDodge=0, GIVE_UP=10;
+  var noTries=0, GIVE_UP=10, lastHover=0, lastPress=0, gaveUp=false;
   var teases=['Maybe another time','hehe, nope 🙈','catch me first 🏃‍♀️','you sure? 🥺',
               'nuh-uh 😼','pretty please? 💗','too slow 😹','can\'t click me 😝',
               'almost! 👀','last one… 🐾'];
-  function dodge(e){
-    if(noTries>=GIVE_UP) return;
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    var now=Date.now();
-    if(now-lastDodge<180) return; // pacing so a hover-jump doesn't spike the counter
-    lastDodge=now;
-    noTries++;
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+  // always lands fully inside the viewport, measured AFTER any text change
+  function fleeMove(){
     noBtn.classList.add('dodging');
-    var bw=noBtn.offsetWidth, bh=noBtn.offsetHeight;
-    var maxX=Math.max(20,window.innerWidth-bw-20);
-    var maxY=Math.max(20,window.innerHeight-bh-20);
-    noBtn.style.left=(20+Math.random()*(maxX-20))+'px';
-    noBtn.style.top =(20+Math.random()*(maxY-20))+'px';
-    noBtn.textContent=teases[Math.min(noTries-1,teases.length-1)];
-    petalBurst(5);
+    var bw=noBtn.offsetWidth||150, bh=noBtn.offsetHeight||46, m=14;
+    var maxX=Math.max(m, window.innerWidth  - bw - m);
+    var maxY=Math.max(m, window.innerHeight - bh - m);
+    noBtn.style.left = clamp(m + Math.random()*(maxX-m), m, maxX) + 'px';
+    noBtn.style.top  = clamp(m + Math.random()*(maxY-m), m, maxY) + 'px';
+  }
+  // hovering only makes it flee — it does NOT count, so idle mouse movement never "uses it up"
+  function onHover(){
+    if(gaveUp) return;
+    var now=Date.now(); if(now-lastHover<300) return; lastHover=now;
+    fleeMove(); petalBurst(3);
+  }
+  // only a real press attempt (tap / click / keyboard) counts toward the give-up
+  function onPress(e){
+    if(gaveUp) return;
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    var now=Date.now(); if(now-lastPress<140) return; lastPress=now; // de-dupe touch+mouse
+    noTries++;
+    noBtn.textContent=teases[clamp(noTries-1,0,teases.length-1)];
+    fleeMove(); petalBurst(5);
     if(noTries>=GIVE_UP) giveUp();
   }
-  noBtn.addEventListener('mouseenter',dodge);
-  noBtn.addEventListener('mousedown',dodge);
-  noBtn.addEventListener('touchstart',dodge,{passive:false});
-  noBtn.addEventListener('click',function(e){e.preventDefault();}); // never actually says no
+  noBtn.addEventListener('mouseenter',onHover);
+  noBtn.addEventListener('mousedown',onPress);
+  noBtn.addEventListener('touchstart',onPress,{passive:false});
+  noBtn.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' ') onPress(e); });
+  noBtn.addEventListener('click',function(e){ e.preventDefault(); }); // never actually says no
+  // if the window resizes while it's loose, pull it back on-screen
+  window.addEventListener('resize',function(){ if(noBtn.classList.contains('dodging') && !gaveUp) fleeMove(); });
 
   function giveUp(){
+    gaveUp=true;
     noBtn.style.opacity='0';
     setTimeout(function(){noBtn.style.display='none';},400);
     catSpam(22);
