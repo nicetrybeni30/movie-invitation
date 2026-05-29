@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A little invitation for Nicky 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --rose:#ff5b7f;
+    --rose-deep:#e23e63;
+    --pink:#ff8fab;
+    --blush:#ffe3ec;
+    --cream:#fff6f8;
+    --ink:#4a2731;
+    --soft:#8a6b73;
+    --gold:#d9a441;
+    --shadow:0 18px 45px rgba(226,62,99,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #ffd9e3 0%, transparent 55%),
+      radial-gradient(900px 500px at 110% 10%, #ffe9c7 0%, transparent 50%),
+      linear-gradient(160deg,#fff6f8 0%, #ffeef3 45%, #ffe3ec 100%);
+    min-height:100%;
+    overflow-x:hidden;
+  }
+
+  /* floating hearts background */
+  .hearts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .hearts span{
+    position:absolute;bottom:-40px;font-size:18px;opacity:.5;
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0);opacity:0}
+    10%{opacity:.6}
+    100%{transform:translateY(-110vh) rotate(360deg);opacity:0}
+  }
+
+  /* falling rose petals */
+  .petals{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+  .petal{
+    position:absolute;top:-40px;width:18px;height:18px;
+    background:radial-gradient(circle at 30% 30%, #ffb3c6 0%, #ff5b7f 55%, #e23e63 100%);
+    border-radius:150% 0 150% 0;
+    opacity:.85;will-change:transform;
+  }
+  .petal.p2{background:radial-gradient(circle at 30% 30%, #ffd9e3 0%, #ff8fab 60%, #ff5b7f 100%)}
+  .petal.p3{background:radial-gradient(circle at 30% 30%, #fff0d6 0%, #ffc785 60%, #d9a441 100%)}
+  @keyframes petalfall{
+    0%{transform:translate(0,0) rotate(0deg);opacity:0}
+    8%{opacity:.9}
+    100%{transform:translate(var(--dx,40px),105vh) rotate(var(--rot,540deg));opacity:0}
+  }
+
+  /* dodging NO button + cat swarm */
+  #noBtn{transition:left .18s ease, top .18s ease, opacity .4s}
+  #noBtn.dodging{
+    position:fixed;z-index:30;margin:0;
+    background:var(--ink);color:#fff;border-color:transparent;font-weight:600;
+    /* dark fill reads on light photos, white ring reads on dark areas */
+    box-shadow:0 0 0 2px #fff, 0 10px 26px rgba(0,0,0,.45);
+  }
+  #noBtn.dodging:hover{background:var(--rose-deep);filter:none}
+  .catspam{position:fixed;inset:0;pointer-events:none;z-index:25;overflow:hidden}
+  .catspam .cat{position:absolute;font-size:40px;will-change:transform;
+    animation:catpop .45s cubic-bezier(.2,1.4,.4,1) both, catfloat 2.8s ease-in-out infinite}
+  .catspam .cat img{width:74px;height:74px;object-fit:cover;border-radius:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,.28);border:2px solid #fff}
+  @keyframes catpop{from{transform:scale(0) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+  @keyframes catfloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(4deg)}}
+
+  .plea{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;
+    background:rgba(74,39,49,.35);backdrop-filter:blur(4px);padding:20px}
+  .plea.show{display:flex;animation:fade .4s ease both}
+  .plea-card{max-width:420px;text-align:center;background:rgba(255,255,255,.92);border-radius:26px;
+    padding:30px 26px;box-shadow:var(--shadow);border:1px solid #fff}
+  .plea-cat{display:flex;justify-content:center;gap:10px;margin-bottom:14px;font-size:46px}
+  .plea-cat img{width:66px;height:66px;object-fit:cover;border-radius:14px;border:2px solid #fff;
+    box-shadow:0 8px 18px rgba(226,62,99,.25)}
+  .plea-big{font-family:'Playfair Display',serif;font-size:24px;color:var(--rose-deep);margin-bottom:10px}
+  .plea-card p{color:var(--soft);font-weight:300;line-height:1.65;font-size:15px}
+  .plea-card p b{color:var(--ink);font-weight:500}
+  .plea-x{margin-top:14px;background:none;border:none;cursor:pointer;color:var(--soft);font-size:13px;font-family:'Poppins',sans-serif;text-decoration:underline}
+
+  .wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:28px 18px 70px}
+
+  /* screen system */
+  .screen{display:none;animation:fade .6s ease both}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:rgba(255,255,255,.72);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.8);
+    border-radius:26px;
+    box-shadow:var(--shadow);
+    padding:34px 30px;
+  }
+
+  /* ---------- intro ---------- */
+  .intro{text-align:center;padding-top:18px}
+  /* polaroid intro photo */
+  .polaroid{
+    display:inline-block;margin:6px auto 26px;position:relative;
+    background:#fff;padding:13px 13px 0;border-radius:7px;
+    box-shadow:0 18px 42px rgba(226,62,99,.26);
+    transform:rotate(-3deg);transition:transform .3s ease;
+  }
+  .polaroid:hover{transform:rotate(-1deg) translateY(-5px)}
+  .polaroid .tape{
+    position:absolute;top:-13px;left:50%;width:92px;height:26px;
+    transform:translateX(-50%) rotate(-4deg);
+    background:rgba(255,182,201,.45);border:1px solid rgba(255,255,255,.65);
+    box-shadow:0 2px 7px rgba(0,0,0,.08);border-radius:2px;
+  }
+  .polaroid .pic{
+    width:232px;height:300px;overflow:hidden;border-radius:3px;
+    background:linear-gradient(135deg,#ffd9e3,#ffe9c7);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .polaroid img{width:100%;height:100%;object-fit:cover;object-position:center 38%}
+  .polaroid .ph{font-size:54px}
+  .polaroid .cap{
+    font-family:'Caveat',cursive;text-align:center;
+    padding:10px 6px 16px;color:var(--rose-deep);font-size:26px;line-height:1;
+  }
+  @media(max-width:420px){.polaroid .pic{width:200px;height:262px}}
+
+  .eyebrow{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--rose-deep);font-weight:600;margin-bottom:10px}
+  h1{font-family:'Playfair Display',serif;font-size:clamp(30px,6vw,46px);line-height:1.1;color:var(--ink);margin-bottom:8px}
+  h1 .name{color:var(--rose-deep);font-style:italic}
+  .lead{max-width:560px;margin:18px auto 6px;color:var(--soft);font-weight:300;font-size:16.5px;line-height:1.75}
+  .lead b{color:var(--ink);font-weight:500}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;justify-content:center;
+    border:none;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:600;
+    padding:15px 30px;border-radius:50px;font-size:15.5px;color:#fff;
+    background:linear-gradient(135deg,var(--rose),var(--rose-deep));
+    box-shadow:0 12px 26px rgba(226,62,99,.35);
+    transition:transform .18s ease, box-shadow .18s ease, filter .18s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(226,62,99,.42);filter:brightness(1.04)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{background:transparent;color:var(--rose-deep);box-shadow:none;border:1.6px solid var(--pink);font-weight:500}
+  .btn.ghost:hover{background:rgba(255,143,171,.12)}
+  .btn.small{padding:11px 20px;font-size:14px}
+
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  .tiny-note{margin-top:18px;font-size:12.5px;color:var(--soft)}
+
+  /* section headings */
+  .sec-head{text-align:center;margin-bottom:22px}
+  .sec-head .eyebrow{margin-bottom:6px}
+  .sec-head h2{font-family:'Playfair Display',serif;font-size:clamp(24px,5vw,34px);color:var(--ink)}
+  .sec-head p{color:var(--soft);font-weight:300;margin-top:6px}
+
+  /* plan timeline */
+  .plan{display:grid;gap:14px;margin:6px 0 26px}
+  .plan-item{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.6);border-radius:18px;padding:16px 18px;border:1px solid #ffe0e9}
+  .plan-item .ic{font-size:24px;flex:none;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--blush),#fff)}
+  .plan-item h3{font-size:16px;font-weight:600}
+  .plan-item span{font-size:13.5px;color:var(--soft)}
+
+  /* movie cards */
+  .movies{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:6px}
+  @media(max-width:620px){.movies{grid-template-columns:1fr}}
+  .movie{
+    cursor:pointer;border-radius:20px;overflow:hidden;position:relative;
+    background:#fff;border:2px solid transparent;box-shadow:0 10px 24px rgba(74,39,49,.10);
+    transition:transform .18s, border-color .18s, box-shadow .18s;
+  }
+  .movie:hover{transform:translateY(-4px);box-shadow:0 18px 32px rgba(226,62,99,.22)}
+  .movie.sel{border-color:var(--rose);box-shadow:0 18px 34px rgba(226,62,99,.30)}
+  .movie .poster{aspect-ratio:2/3;background:linear-gradient(135deg,#3a2a33,#1c1320);display:flex;align-items:center;justify-content:center;position:relative}
+  .movie .poster img{width:100%;height:100%;object-fit:cover}
+  .movie .poster .fallback{color:#ffd9e3;font-family:'Playfair Display',serif;font-size:22px;text-align:center;padding:0 14px}
+  .movie .badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.55);color:#ffd9e3;font-size:11px;padding:4px 10px;border-radius:20px;letter-spacing:1px}
+  .movie .pick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--rose-deep);opacity:0;transform:scale(.6);transition:.2s}
+  .movie.sel .pick{opacity:1;transform:scale(1)}
+  .movie .meta{padding:14px 16px}
+  .movie .meta h3{font-family:'Playfair Display',serif;font-size:19px}
+  .movie .meta .sub{font-size:12.5px;color:var(--soft);margin:3px 0 8px}
+  .movie .meta .syn{font-size:12.5px;color:var(--ink);opacity:.78;line-height:1.5;font-weight:300}
+
+  /* date pills */
+  .pills{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:4px 0 6px}
+  .pill{
+    cursor:pointer;min-width:130px;text-align:center;padding:16px 22px;border-radius:18px;
+    background:rgba(255,255,255,.7);border:2px solid #ffe0e9;transition:.18s;
+  }
+  .pill:hover{transform:translateY(-3px)}
+  .pill.sel{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border-color:transparent;box-shadow:0 12px 26px rgba(226,62,99,.32)}
+  .pill .dow{font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.8}
+  .pill .num{font-family:'Playfair Display',serif;font-size:34px;line-height:1}
+  .pill .mon{font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.8}
+
+  /* time grid */
+  .times{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:8px}
+  .time{
+    cursor:pointer;text-align:center;padding:14px 10px;border-radius:14px;
+    background:rgba(255,255,255,.7);border:2px solid #ffe0e9;transition:.16s;
+  }
+  .time:hover{transform:translateY(-2px);border-color:var(--pink)}
+  .time.sel{background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border-color:transparent;box-shadow:0 10px 22px rgba(226,62,99,.3)}
+  .time.disabled{opacity:.32;pointer-events:none;filter:grayscale(.6)}
+  .time.disabled .t{text-decoration:line-through}
+  .time.disabled .hall{font-size:10px}
+  .time .t{font-weight:600;font-size:16px}
+  .time .hall{font-size:11px;opacity:.75;margin-top:2px}
+  .time-section{margin-bottom:18px}
+  .time-section .ts-title{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;
+    font-size:18px;color:var(--rose-deep);margin:4px 0 12px}
+  .time-section .ts-title .dot{width:8px;height:8px;border-radius:50%;background:var(--rose)}
+
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+
+  /* summary */
+  .summary-line{display:flex;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px dashed #ffd0dd;font-size:15px}
+  .summary-line:last-of-type{border-bottom:none}
+  .summary-line .k{color:var(--soft)}
+  .summary-line .v{font-weight:600;text-align:right}
+  .heart-divider{text-align:center;color:var(--rose);font-size:20px;margin:8px 0 18px}
+
+  .shot-note{
+    margin:18px auto 0;max-width:520px;text-align:center;font-size:14px;line-height:1.6;
+    color:var(--ink);background:linear-gradient(135deg,#fff0f4,#ffe3ec);
+    border:1px dashed var(--pink);border-radius:16px;padding:14px 18px;
+  }
+  .shot-note b{color:var(--rose-deep)}
+  .final-msg{text-align:center}
+  .final-msg .big{font-family:'Playfair Display',serif;font-size:30px;color:var(--rose-deep);margin-bottom:10px}
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(120px);
+    background:var(--ink);color:#fff;padding:14px 22px;border-radius:50px;font-size:14px;
+    box-shadow:0 14px 30px rgba(0,0,0,.25);transition:transform .35s;z-index:20;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0)}
+
+  .step-dots{display:flex;gap:8px;justify-content:center;margin-bottom:24px}
+  .step-dots i{width:9px;height:9px;border-radius:50%;background:#ffd0dd;transition:.2s}
+  .step-dots i.on{background:var(--rose-deep);width:26px;border-radius:6px}
+
+  .gentle-card{text-align:center}
+  .gentle-card .big{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+<div class="petals" id="petals"></div>
+<div class="catspam" id="catspam"></div>
+
+<!-- cute plea after the NO button gives up -->
+<div class="plea" id="plea">
+  <div class="plea-card">
+    <div class="plea-cat">
+      <img src="cat1.png" alt="" onerror="this.replaceWith(document.createTextNode('😿'))" />
+      <img src="cat2.png" alt="" onerror="this.replaceWith(document.createTextNode('🥺'))" />
+      <img src="cat3.png" alt="" onerror="this.replaceWith(document.createTextNode('🙀'))" />
+    </div>
+    <div class="plea-big">okayyy the “No” button ran away… 🐾</div>
+    <p>It's totally okay if it's a no for real, <b>zero pressure, promise</b> 🤍.<br/>
+    But the kitties really hope you'll say yes 🥹💗</p>
+    <div class="cta-row" style="margin-top:18px">
+      <button class="btn" onclick="closePlea(); go(1)">okay, show me the plan 🌸</button>
+    </div>
+    <button class="plea-x" onclick="closePlea()">maybe later · close ✕</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ░░░ SCREEN 0 · gentle intro ░░░ -->
+  <section class="screen active" id="s0">
+    <div class="card intro">
+      <div class="polaroid">
+        <div class="tape"></div>
+        <div class="pic">
+          <img src="nicky.jpg" alt="" onerror="this.style.display='none';this.parentNode.querySelector('.ph').style.display='flex'" />
+          <div class="ph" style="display:none">🌸</div>
+        </div>
+        <div class="cap">for you, Nicky 🌸</div>
+      </div>
+      <div class="eyebrow">a small, no-pressure note</div>
+      <h1>Hi, <span class="name">Nicky</span> 🌷</h1>
+      <p class="lead">
+        First, thank you for your time, even just for opening this. 💗<br/>
+        I know things have been quiet between us, and I <b>completely respect that</b>.
+        I'm not here to rush you or ask for anything heavy.
+      </p>
+      <p class="lead">
+        I just thought of a soft little afternoon of <b>lunch and a movie</b>, and wanted to leave
+        the door open. <b>Only if you're free, and only if you'd genuinely like to.</b>
+        No pressure at all. If now isn't the time, that's okay too. 🤍
+      </p>
+      <p class="lead" style="margin-top:10px"><b>No stress, no pressure</b>, just pure enjoyment and good fun. 🌹✨</p>
+      <div class="cta-row">
+        <button class="btn" onclick="go(1)">See the little plan 🌸</button>
+        <button class="btn ghost" id="noBtn">Maybe another time</button>
+      </div>
+      <p class="tiny-note">Take your time, there's zero rush. 💌</p>
+    </div>
+  </section>
+
+  <!-- ░░░ SCREEN: gentle decline ░░░ -->
+  <section class="screen" id="smaybe">
+    <div class="card gentle-card">
+      <div class="big">That's completely okay. 🤍</div>
+      <p class="lead">
+        Thank you for being honest, I really mean it. Your time and feelings come first,
+        always. The invitation stays open with no expiry, no pressure. Whenever (or if ever)
+        you feel like it, you know where to find me. 🌸
+      </p>
+      <div class="cta-row">
+        <button class="btn ghost small" onclick="go(0)">↩ Go back</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ SCREEN 1 · the plan ░░░ -->
+  <section class="screen" id="s1">
+    <div class="card">
+      <div class="step-dots"><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="sec-head">
+        <div class="eyebrow">here's the idea</div>
+        <h2>A gentle little day out</h2>
+        <p>Simple, low-key, no expectations 💗</p>
+      </div>
+      <div class="plan">
+        <div class="plan-item">
+          <div class="ic">🚗</div>
+          <div><h3>I'll pick you up</h3><span>No commuting for you, about an hour of travel and we're at SM North</span></div>
+        </div>
+        <div class="plan-item">
+          <div class="ic">🥢</div>
+          <div><h3>Lunch @ Din Tai Fung</h3><span>SM North EDSA, a short wait then a relaxed hour eating, those xiao long bao first 🥟</span></div>
+        </div>
+        <div class="plan-item">
+          <div class="ic">🚶‍♀️</div>
+          <div><h3>Short walk over to Trinoma</h3><span>After we eat, no rush, about an hour with time to spare</span></div>
+        </div>
+        <div class="plan-item">
+          <div class="ic">🎬</div>
+          <div><h3>A movie at Trinoma Cinemas</h3><span>Pick one, or watch both in one day, totally up to you 🍿</span></div>
+        </div>
+        <div class="plan-item">
+          <div class="ic">☕</div>
+          <div><h3>Dessert or coffee after (optional)</h3><span>Only if you're up for it, an extra hour to chill, no pressure 🍰</span></div>
+        </div>
+        <div class="plan-item">
+          <div class="ic">🏠</div>
+          <div><h3>I'll take you home safely</h3><span>I'll drive you back to your door at the end of the day 💗</span></div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn ghost small" onclick="go(0)">↩ Back</button>
+        <button class="btn small" onclick="go(2)">Pick the movie 🎬</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ SCREEN 2 · movie pick ░░░ -->
+  <section class="screen" id="s2">
+    <div class="card">
+      <div class="step-dots"><i></i><i class="on"></i><i></i><i></i></div>
+      <div class="sec-head">
+        <div class="eyebrow">your choice</div>
+        <h2>Which would you like?</h2>
+        <p>Tap one, or tap both and we'll make it a double feature 💕</p>
+      </div>
+      <div class="movies">
+        <div class="movie" data-movie="Obsession (2026)" onclick="pickMovie(this)">
+          <div class="poster">
+            <img src="obsession.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+            <div class="fallback" style="display:none">Obsession<br/><small style="font-size:13px;opacity:.7">2026</small></div>
+            <div class="badge">HORROR · 13</div>
+            <div class="pick">✓</div>
+          </div>
+          <div class="meta">
+            <h3>Obsession</h3>
+            <div class="sub">2026 · Horror · Trinoma</div>
+            <div class="syn">A hopeless romantic wins over the mysterious “One Wish Willow” to win his crush's heart, only to learn some wishes come at a dark price.</div>
+          </div>
+        </div>
+        <div class="movie" data-movie="Colony (2026)" onclick="pickMovie(this)">
+          <div class="poster">
+            <img src="colony.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+            <div class="fallback" style="display:none">Colony<br/><small style="font-size:13px;opacity:.7">2026</small></div>
+            <div class="badge">K-MOVIE · HORROR</div>
+            <div class="pick">✓</div>
+          </div>
+          <div class="meta">
+            <h3>Colony</h3>
+            <div class="sub">2026 · K-Movie · 2h 2m</div>
+            <div class="syn">A biotech conference spirals into catastrophe when a rapidly mutating virus is unleashed. Tense, gripping, edge-of-your-seat. (Yeon Sang-ho)</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn ghost small" onclick="go(1)">↩ Back</button>
+        <button class="btn small" id="toDate" onclick="go(3)" disabled style="opacity:.5">Pick a day 📅</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ SCREEN 3 · date pick ░░░ -->
+  <section class="screen" id="s3">
+    <div class="card">
+      <div class="step-dots"><i></i><i></i><i class="on"></i><i></i></div>
+      <div class="sec-head">
+        <div class="eyebrow">whenever suits you</div>
+        <h2>Which day are you free?</h2>
+        <p>These are the days I'm open, but yours comes first 🌷</p>
+      </div>
+      <div class="pills">
+        <div class="pill" data-date="Saturday, May 30" onclick="pickDate(this)">
+          <div class="dow">Sat</div><div class="num">30</div><div class="mon">May</div>
+        </div>
+        <div class="pill" data-date="Sunday, May 31" onclick="pickDate(this)">
+          <div class="dow">Sun</div><div class="num">31</div><div class="mon">May</div>
+        </div>
+      </div>
+      <p class="tiny-note" style="text-align:center">If neither works, no worries, you can tell me a better day at the end. 💌</p>
+      <div class="nav">
+        <button class="btn ghost small" onclick="go(2)">↩ Back</button>
+        <button class="btn small" id="toTime" onclick="go(4)" disabled style="opacity:.5">Pick a time ⏰</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ SCREEN 4 · time pick ░░░ -->
+  <section class="screen" id="s4">
+    <div class="card">
+      <div class="step-dots"><i></i><i></i><i></i><i class="on"></i></div>
+      <div class="sec-head">
+        <div class="eyebrow">what time works?</div>
+        <h2>Pick a showtime</h2>
+        <p id="timeFor">Trinoma showtimes 🍿</p>
+      </div>
+      <div id="timeSections"><!-- filled by JS --></div>
+      <div class="nav">
+        <button class="btn ghost small" onclick="go(3)">↩ Back</button>
+        <button class="btn small" id="toSum" onclick="go(5)" disabled style="opacity:.5">Almost done 💌</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░░ SCREEN 5 · summary / let me know ░░░ -->
+  <section class="screen" id="s5">
+    <div class="card">
+      <div class="sec-head">
+        <div class="eyebrow">if this feels right</div>
+        <h2>Here's our little plan 💕</h2>
+      </div>
+      <div class="heart-divider">♡ ♡ ♡</div>
+      <div class="summary-line"><span class="k">📅 Day</span><span class="v" id="sumDate"></span></div>
+      <div class="summary-line"><span class="k">🚗 I pick you up</span><span class="v" id="sumPickup"></span></div>
+      <div class="summary-line"><span class="k">🥢 Lunch</span><span class="v" id="sumLunch">Din Tai Fung · SM North</span></div>
+      <div id="sumMovies"><!-- filled by JS --></div>
+      <div class="summary-line"><span class="k">📍 Cinema</span><span class="v">Trinoma</span></div>
+      <div class="summary-line"><span class="k">☕ Dessert / coffee</span><span class="v" id="sumDessert">optional, your call 🍰</span></div>
+      <div class="summary-line"><span class="k">🏠 Then</span><span class="v">I take you home safe 💗</span></div>
+      <div class="heart-divider">♡ ♡ ♡</div>
+      <p class="lead" style="margin-top:6px">
+        Again, <b>only if you truly want to</b>. If yes, just let me know and I'll take care of the rest. 🤍
+      </p>
+      <div class="shot-note">
+        📸 <b>Screenshot this</b> and send it to me so I'll know your pick, then just <b>text or call me</b> 💌
+      </div>
+      <div class="cta-row">
+        <button class="btn" id="smsBtn" onclick="sendSMS()">📱 Text me</button>
+        <button class="btn" id="callBtn" onclick="callHim()">📞 Call me</button>
+      </div>
+      <p class="tiny-note">Whatever you decide, thank you for reading this far. It already means a lot. 🌸</p>
+      <div class="nav" style="justify-content:center;margin-top:18px">
+        <button class="btn ghost small" onclick="go(4)">↩ Back</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast">Copied! 💗</div>
+
+<script>
+  /* ----- your number (call + text) ----- */
+  var MY_NUMBER = "+639682819821"; // local: 0968 281 9821
+
+  var state = { movies:[], date:null, times:{} }; // times: {movieName:{t,hall}}
+
+  /* showtimes pulled from the listings */
+  var SHOWTIMES = {
+    "Obsession (2026)":[
+      {t:"2:00 PM",hall:"TR Cinema 3"},{t:"3:10 PM",hall:"TR Cinema 2"},
+      {t:"4:20 PM",hall:"TR Cinema 3"},{t:"5:30 PM",hall:"TR Cinema 2"},
+      {t:"6:40 PM",hall:"TR Cinema 3"},{t:"7:50 PM",hall:"TR Cinema 2"},
+      {t:"9:00 PM",hall:"TR Cinema 3"}
+    ],
+    "Colony (2026)":[
+      {t:"1:00 PM",hall:"TR Cinema 7"},{t:"3:40 PM",hall:"TR Cinema 7"},
+      {t:"6:20 PM",hall:"TR Cinema 7"},{t:"9:00 PM",hall:"TR Cinema 7"}
+    ]
+  };
+
+  /* movie runtimes (minutes) + how long things take */
+  var RUNTIME = { "Obsession (2026)":100, "Colony (2026)":122 }; // Obsession ~1h40 (est), Colony 2h2m
+  var TRAVEL=60, WAIT=30, EAT=60, WALK=60; // 1h drive + 30m queue + 1h lunch + 1h walk/buffer
+  var PRE = TRAVEL+WAIT+EAT+WALK;          // 3½ hrs before the first movie = pick-up time
+  var DESSERT=60;                          // optional coffee/dessert after the movie(s)
+  var GAP = 20;                            // breather between the two movies of a double feature
+
+  function parseT(s){ // "1:00 PM" -> minutes since midnight
+    var m=s.match(/(\d+):(\d+)\s*(AM|PM)/i); if(!m) return 0;
+    var h=(+m[1])%12; if(/pm/i.test(m[3])) h+=12;
+    return h*60 + (+m[2]);
+  }
+  function fmtT(mins){
+    mins=((Math.round(mins)%1440)+1440)%1440;
+    var h=Math.floor(mins/60), m=mins%60, ap=h>=12?'PM':'AM', h12=h%12||12;
+    return h12+':'+(m<10?'0'+m:m)+' '+ap;
+  }
+  function earliestStart(){
+    var t=null;
+    state.movies.forEach(function(m){ var p=state.times[m]; if(p){ var s=parseT(p.t); if(t===null||s<t)t=s; } });
+    return t;
+  }
+  function pickupMins(){ var e=earliestStart(); return e===null?null:e-PRE; }
+  function lastEndMins(){ // when the last movie of the day finishes
+    var t=null;
+    state.movies.forEach(function(m){ var p=state.times[m]; if(p){ var e=parseT(p.t)+RUNTIME[m]; if(t===null||e>t)t=e; } });
+    return t;
+  }
+
+  var screens = ["s0","s1","s2","s3","s4","s5"];
+  function go(i){
+    var id = (i==='maybe') ? 'smaybe' : 's'+i;
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    petalBurst(22); // rose-petal shower on every transition
+    if(i===4) buildTimes();
+    if(i===5) fillSummary();
+  }
+
+  /* ----- rose petals ----- */
+  var petalBox=document.getElementById('petals');
+  function spawnPetal(extraFast){
+    var p=document.createElement('div');
+    var cls=['','p2','p3'][Math.floor(Math.random()*3)];
+    p.className='petal'+(cls?' '+cls:'');
+    var size=10+Math.random()*16;
+    p.style.width=size+'px'; p.style.height=size+'px';
+    p.style.left=(Math.random()*100)+'%';
+    p.style.setProperty('--dx',(Math.random()*220-110)+'px');
+    p.style.setProperty('--rot',(360+Math.random()*540)+'deg');
+    var dur=(extraFast? 3.5+Math.random()*2.5 : 6+Math.random()*5);
+    p.style.animation='petalfall '+dur+'s linear forwards';
+    petalBox.appendChild(p);
+    setTimeout(function(){p.remove()}, dur*1000+200);
+  }
+  function petalBurst(n){ for(var i=0;i<n;i++){ (function(d){setTimeout(function(){spawnPetal(true)},d)})(i*45); } }
+  // gentle ongoing drift
+  setInterval(function(){ if(!document.hidden) spawnPetal(false); }, 700);
+  petalBurst(18); // welcome shower on load
+
+  /* ----- the playful (not pushy) dodging "No" button ----- */
+  var noBtn=document.getElementById('noBtn');
+  var noTries=0, lastDodge=0, GIVE_UP=10;
+  var teases=['Maybe another time','hehe, nope 🙈','catch me first 🏃‍♀️','you sure? 🥺',
+              'nuh-uh 😼','pretty please? 💗','too slow 😹','can\'t click me 😝',
+              'almost! 👀','last one… 🐾'];
+  function dodge(e){
+    if(noTries>=GIVE_UP) return;
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    var now=Date.now();
+    if(now-lastDodge<180) return; // pacing so a hover-jump doesn't spike the counter
+    lastDodge=now;
+    noTries++;
+    noBtn.classList.add('dodging');
+    var bw=noBtn.offsetWidth, bh=noBtn.offsetHeight;
+    var maxX=Math.max(20,window.innerWidth-bw-20);
+    var maxY=Math.max(20,window.innerHeight-bh-20);
+    noBtn.style.left=(20+Math.random()*(maxX-20))+'px';
+    noBtn.style.top =(20+Math.random()*(maxY-20))+'px';
+    noBtn.textContent=teases[Math.min(noTries-1,teases.length-1)];
+    petalBurst(5);
+    if(noTries>=GIVE_UP) giveUp();
+  }
+  noBtn.addEventListener('mouseenter',dodge);
+  noBtn.addEventListener('mousedown',dodge);
+  noBtn.addEventListener('touchstart',dodge,{passive:false});
+  noBtn.addEventListener('click',function(e){e.preventDefault();}); // never actually says no
+
+  function giveUp(){
+    noBtn.style.opacity='0';
+    setTimeout(function(){noBtn.style.display='none';},400);
+    catSpam(22);
+    setTimeout(showPlea,1700); // let the cute cat swarm show for ~1.7s first
+  }
+
+  /* ----- crying-cat swarm (uses cat1.jpg / cat2.jpg / cat3.jpg, falls back to emoji) ----- */
+  var catBox=document.getElementById('catspam');
+  var catImgs=['cat1.png','cat2.png','cat3.png'];
+  var catEmoji=['😿','🥺','😭','🙀','😹','💔','🐱','😻'];
+  function catSpam(n){
+    catBox.innerHTML='';
+    for(var i=0;i<n;i++){
+      (function(idx){
+        setTimeout(function(){
+          var c=document.createElement('div');
+          c.className='cat';
+          c.style.left=(Math.random()*90)+'%';
+          c.style.top=(Math.random()*84)+'%';
+          c.style.animationDelay='0s, '+(Math.random()*1.2)+'s';
+          var img=document.createElement('img');
+          img.src=catImgs[idx%catImgs.length];
+          img.alt='';
+          img.onerror=function(){ // no cat image saved → cute emoji instead
+            c.removeChild(img);
+            c.style.fontSize=(34+Math.random()*30)+'px';
+            c.textContent=catEmoji[idx%catEmoji.length];
+          };
+          c.appendChild(img);
+          catBox.appendChild(c);
+        }, idx*60);
+      })(i);
+    }
+  }
+  function showPlea(){ document.getElementById('plea').classList.add('show'); }
+  function closePlea(){
+    document.getElementById('plea').classList.remove('show');
+    catBox.innerHTML='';
+  }
+
+  function pickMovie(el){
+    var name=el.getAttribute('data-movie');
+    var i=state.movies.indexOf(name);
+    if(i>=0){ state.movies.splice(i,1); el.classList.remove('sel'); delete state.times[name]; }
+    else { state.movies.push(name); el.classList.add('sel'); }
+    var ok=state.movies.length>0;
+    var b=document.getElementById('toDate'); b.disabled=!ok; b.style.opacity=ok?1:.5;
+  }
+
+  function pickDate(el){
+    document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('sel')});
+    el.classList.add('sel');
+    state.date = el.getAttribute('data-date');
+    var b=document.getElementById('toTime'); b.disabled=false; b.style.opacity=1;
+  }
+
+  // when both movies are chosen, a showtime is unwatchable if it overlaps the other movie's pick
+  function conflicts(movie, s){
+    if(state.movies.length<2) return false;
+    var other = state.movies[0]===movie ? state.movies[1] : state.movies[0];
+    var pick = state.times[other];
+    if(!pick) return false;
+    var sA=parseT(pick.t), eA=sA+RUNTIME[other];      // the other movie's slot
+    var sB=parseT(s.t),   eB=sB+RUNTIME[movie];        // this candidate slot
+    var fits = (sB >= eA+GAP) || (sA >= eB+GAP);        // one fully before/after the other
+    return !fits;
+  }
+  function buildTimes(){
+    var wrap=document.getElementById('timeSections');
+    var both = state.movies.length>1;
+    document.getElementById('timeFor').textContent =
+      (both ? 'Double feature' : state.movies[0]) + ' · ' + (state.date||'') + ' · Trinoma 🍿';
+    wrap.innerHTML='';
+    state.movies.forEach(function(movie){
+      var sec=document.createElement('div'); sec.className='time-section';
+      var hint = both ? ' <span style="font-size:12px;color:var(--soft);font-family:Poppins">(crossed-out times overlap the other film)</span>' : '';
+      var title=both ? ('<div class="ts-title"><span class="dot"></span>'+movie+hint+'</div>') : '';
+      var grid=document.createElement('div'); grid.className='times';
+      (SHOWTIMES[movie]||[]).forEach(function(s){
+        var d=document.createElement('div');
+        d.className='time'; d.innerHTML='<div class="t">'+s.t+'</div><div class="hall">'+s.hall+'</div>';
+        if(state.times[movie] && state.times[movie].t===s.t) d.classList.add('sel');
+        if(conflicts(movie,s)) d.classList.add('disabled');
+        d.onclick=function(){
+          state.times[movie]={t:s.t,hall:s.hall};
+          buildTimes();   // re-render so the other film's overlapping times get excluded
+          enableSum();
+        };
+        grid.appendChild(d);
+      });
+      sec.innerHTML=title; sec.appendChild(grid); wrap.appendChild(sec);
+    });
+  }
+  function enableSum(){
+    var ok = state.movies.length>0 && state.movies.every(function(m){return state.times[m];});
+    var b=document.getElementById('toSum'); b.disabled=!ok; b.style.opacity=ok?1:.5;
+  }
+
+  function fillSummary(){
+    document.getElementById('sumDate').textContent = state.date || '';
+    var pm = pickupMins();
+    document.getElementById('sumPickup').textContent =
+      pm===null ? 'around 2½ hrs before showtime' : ('~'+fmtT(pm));
+    document.getElementById('sumLunch').textContent =
+      pm===null ? 'Din Tai Fung · SM North' : ('Din Tai Fung · ~'+fmtT(pm+TRAVEL)+' onwards');
+    var le=lastEndMins();
+    document.getElementById('sumDessert').textContent =
+      le===null ? 'optional, your call 🍰' : ('optional · ~'+fmtT(le)+' to '+fmtT(le+DESSERT));
+    var box=document.getElementById('sumMovies'); box.innerHTML='';
+    // show in chronological order so the day reads top-to-bottom
+    var ordered = state.movies.slice().sort(function(a,b){
+      var pa=state.times[a], pb=state.times[b];
+      return (pa?parseT(pa.t):9999)-(pb?parseT(pb.t):9999);
+    });
+    ordered.forEach(function(m){
+      var pick=state.times[m];
+      var val = pick ? (pick.t+' · '+pick.hall) : 'time TBD';
+      var row=document.createElement('div'); row.className='summary-line';
+      row.innerHTML='<span class="k">🎬 '+m+'</span><span class="v">'+val+'</span>';
+      box.appendChild(row);
+    });
+    var hide = !MY_NUMBER;
+    document.getElementById('smsBtn').style.display = hide?'none':'';
+    document.getElementById('callBtn').style.display = hide?'none':'';
+  }
+
+  function planText(){
+    var lines=["Hi! Okay, I'd like to 💗"];
+    if(state.movies.length>1) lines.push("Let's do both in one day 🥰");
+    lines.push("• Day: "+state.date);
+    var pm=pickupMins();
+    lines.push("• You pick me up: "+(pm===null?"~2½ hrs before showtime":"~"+fmtT(pm)));
+    lines.push("• Lunch at Din Tai Fung (SM North) first 🥢");
+    var ordered = state.movies.slice().sort(function(a,b){
+      var pa=state.times[a], pb=state.times[b];
+      return (pa?parseT(pa.t):9999)-(pb?parseT(pb.t):9999);
+    });
+    ordered.forEach(function(m){
+      var pick=state.times[m];
+      lines.push("• "+m+": "+(pick ? pick.t+' · '+pick.hall : 'your pick'));
+    });
+    var le=lastEndMins();
+    lines.push("• Dessert/coffee after (optional)"+(le===null?"":": ~"+fmtT(le)+" to "+fmtT(le+DESSERT)));
+    lines.push("• Then I'll take you home safely 🏠");
+    lines.push("See you then 🌸");
+    return lines.join("\n");
+  }
+  function copyPlan(){
+    var txt=planText();
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(showToast,function(){fallbackCopy(txt)})}
+    else fallbackCopy(txt);
+  }
+  function fallbackCopy(txt){
+    var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy')}catch(e){}
+    document.body.removeChild(ta);showToast();
+  }
+  function showToast(){var t=document.getElementById('toast');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2200);}
+  function sendSMS(){
+    if(!MY_NUMBER)return;
+    petalBurst(28);
+    // iOS (iPhone) wants sms:NUMBER&body=… ; most others use ?body=…
+    var iOS = /iP(hone|ad|od)/.test(navigator.userAgent);
+    var sep = iOS ? '&' : '?';
+    window.location.href='sms:'+MY_NUMBER+sep+'body='+encodeURIComponent(planText());
+  }
+  function callHim(){
+    if(!MY_NUMBER)return;
+    petalBurst(28);
+    window.location.href='tel:'+MY_NUMBER;
+  }
+
+  /* floating hearts */
+  (function(){
+    var c=document.getElementById('hearts');var e=['💗','🌸','💕','🤍','🌷','💞'];
+    for(var i=0;i<14;i++){
+      var s=document.createElement('span');
+      s.textContent=e[i%e.length];
+      s.style.left=(Math.random()*100)+'%';
+      s.style.fontSize=(14+Math.random()*22)+'px';
+      s.style.animationDuration=(9+Math.random()*10)+'s';
+      s.style.animationDelay=(Math.random()*9)+'s';
+      c.appendChild(s);
+    }
+  })();
+</script>
+</body>
+</html>
