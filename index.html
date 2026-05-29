@@ -61,7 +61,7 @@
   }
 
   /* dodging NO button + cat swarm */
-  #noBtn{transition:left .18s ease, top .18s ease, opacity .4s}
+  #noBtn{transition:opacity .4s}
   #noBtn.dodging{
     position:fixed;z-index:30;margin:0;white-space:nowrap;max-width:calc(100vw - 28px);
     background:var(--ink);color:#fff;border-color:transparent;font-weight:600;
@@ -546,6 +546,8 @@
     document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
     document.getElementById(id).classList.add('active');
     window.scrollTo({top:0,behavior:'smooth'});
+    // if she proceeds while the "No" button is mid-flight (reparented to body), tuck it away
+    if(id!=='s0'){ var nb=document.getElementById('noBtn'); if(nb && nb.classList.contains('dodging')) nb.style.display='none'; }
     petalBurst(22); // rose-petal shower on every transition
     if(i===4) buildTimes();
     if(i===5) fillSummary();
@@ -581,6 +583,9 @@
   function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
   // always lands fully inside the viewport, then self-corrects using the REAL rendered box
   function fleeMove(){
+    // CRITICAL: re-parent to <body> so position:fixed is viewport-relative.
+    // (.card's backdrop-filter + .screen's transform otherwise trap fixed positioning.)
+    if(noBtn.parentNode!==document.body) document.body.appendChild(noBtn);
     noBtn.classList.add('dodging');
     var m=14, vw=document.documentElement.clientWidth, vh=document.documentElement.clientHeight;
     var bw=noBtn.offsetWidth||150, bh=noBtn.offsetHeight||46;
